@@ -5,7 +5,7 @@
 
 module Bydev
   # 이 패키지가 따르는 동작 명세 판.
-  SPEC_VERSION = '1.1.1'
+  SPEC_VERSION = '1.2.0'
 
   # 에러 코드 — API(contracts ERROR_CODES)와 SDK(명세 3.3). 분기는 이 값으로 한다.
   module Codes
@@ -50,7 +50,7 @@ module Bydev
 
   # 규칙 (sdks/spec/rules.json).
   module Rules
-    SPEC_VERSION = '1.1.1'
+    SPEC_VERSION = '1.2.0'
     API = 'v1'
     USER_AGENT_LANGUAGES = ['typescript', 'dotnet', 'swift', 'kotlin', 'python', 'go', 'rust', 'c'].freeze
     USER_AGENT_PATTERN = '^bydev-(typescript|dotnet|swift|kotlin|python|go|rust|c)/[0-9]+\\.[0-9]+\\.[0-9]+(-[0-9A-Za-z.-]+)?( .+)?$'
@@ -69,6 +69,8 @@ module Bydev
     FINGERPRINT_ALGORITHM = 'SHA-256'
     FINGERPRINT_SALT = 'bydev-device-v1'
     FINGERPRINT_ENCODING = 'hex-lower'
+    FINGERPRINT_SOURCE_READ_ATTEMPTS = 3
+    FINGERPRINT_SOURCE_READ_RETRY_DELAY_MS = 300
     STORAGE_SERVICE = 'dev.developedby.sdk'
     STORAGE_RECORD_VERSION = 1
     TRANSIENT_CODES = ['NETWORK_ERROR', 'RATE_LIMITED', 'INTERNAL_ERROR'].freeze
