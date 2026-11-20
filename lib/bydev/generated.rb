@@ -5,7 +5,7 @@
 
 module Bydev
   # 이 패키지가 따르는 동작 명세 판.
-  SPEC_VERSION = '1.1.0'
+  SPEC_VERSION = '1.1.1'
 
   # 에러 코드 — API(contracts ERROR_CODES)와 SDK(명세 3.3). 분기는 이 값으로 한다.
   module Codes
@@ -50,7 +50,7 @@ module Bydev
 
   # 규칙 (sdks/spec/rules.json).
   module Rules
-    SPEC_VERSION = '1.1.0'
+    SPEC_VERSION = '1.1.1'
     API = 'v1'
     USER_AGENT_LANGUAGES = ['typescript', 'dotnet', 'swift', 'kotlin', 'python', 'go', 'rust', 'c'].freeze
     USER_AGENT_PATTERN = '^bydev-(typescript|dotnet|swift|kotlin|python|go|rust|c)/[0-9]+\\.[0-9]+\\.[0-9]+(-[0-9A-Za-z.-]+)?( .+)?$'
