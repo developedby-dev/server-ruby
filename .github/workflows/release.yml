@@ -54,7 +54,24 @@ jobs:
       - uses: actions/attest-build-provenance@4d101475d8b20a2381f78447822ac1eab6504dd8 # v4.2.2
         with:
           subject-path: "*.gem"
-      - uses: rubygems/configure-rubygems-credentials@dc5a8d8553e6ee01fc26761a49e99e733d17954a # v2.1.0
+      # 신뢰 게시 키 — 새 젬의 첫 게시는 소유할 RubyGems 계정을 밝혀야 한다(`owner`, 2026-11 rubygems.org — 계정 developedby-dev의 고정 ID).
+      # rubygems/configure-rubygems-credentials v2.1.0 · release-gem v1.4.2에는 그 입력이 없어 교환을 직접 한다(2026-11-21 첫 게시가 403으로 거절됨).
+      # 키는 15분짜리 push_rubygem 전용이고 출력 · 로그에 남기지 않는다
+      - name: 신뢰 게시 키 받기
+        env:
+          RUBYGEMS_OWNER: "256018"
+        run: |
+          set -euo pipefail
+          jwt=$(curl -sSf -H "Authorization: bearer $ACTIONS_ID_TOKEN_REQUEST_TOKEN" "$ACTIONS_ID_TOKEN_REQUEST_URL&audience=rubygems.org" | jq -r .value)
+          echo "::add-mask::$jwt"
+          key=$(jq -n --arg jwt "$jwt" --arg owner "$RUBYGEMS_OWNER" '{jwt: $jwt, owner: $owner}' \
+            | curl -sSf -X POST https://rubygems.org/api/v1/oidc/trusted_publisher/exchange_token -H "Content-Type: application/json" --data-binary @- \
+            | jq -r .rubygems_api_key)
+          echo "::add-mask::$key"
+          test -n "$key" && test "$key" != null
+          mkdir -p ~/.gem
+          printf -- '---\n:rubygems_api_key: %s\n' "$key" > ~/.gem/credentials
+          chmod 600 ~/.gem/credentials
       - name: 게시 (신뢰 게시)
         env:
           TAG: ${{ github.ref_name }}
